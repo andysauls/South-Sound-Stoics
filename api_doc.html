@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe</title>
+</head>
+<body>
+    <h2>Subscribe to the South Sound Stoics newsletter</h2>
+    <form id="subscribeForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Subscribe</button>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        const form = document.getElementById('subscribeForm');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+
+            // Brevo API URL for adding a contact
+            const apiUrl = 'https://api.brevo.com/v3/contacts';
+
+            const apiKey = 'xkeysib-2f842adf815bf44a7c2fc445026348603611605c0fbbca86e0fabbec0abbae6c-l5BXc6lsxcRdgpr1xkeysib-2f842adf815bf44a7c2fc445026348603611605c0fbbca86e0fabbec0abbae6c-l5BXc6lsxcRdgpr1'; // Replace with your actual API key
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'api-key': apiKey
+                },
+                body: JSON.stringify({
+                    email: email,
+                    listIds: [#3], // Replace with your actual list ID
+                    updateEnabled: true // Set to true to update the contact if it already exists
+                })
+            });
+
+            const messageDiv = document.getElementById('responseMessage');
+            if (response.ok) {
+                messageDiv.textContent = "Thank you for subscribing!";
+            } else {
+                const errorData = await response.json();
+                messageDiv.textContent = `Subscription failed: ${errorData.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
